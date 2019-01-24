@@ -16,7 +16,7 @@ const OrderDetails = (props) => {
                     <Header>Order ID: {props.order.order_id}</Header>
                     <p>Created Date: {props.order.created_date}</p>
                 </Modal.Description>
-                <Items />
+                <Items order_id={props.order.order_id} />
             </Modal.Content>
         </Modal>
     );
