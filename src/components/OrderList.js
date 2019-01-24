@@ -19,7 +19,7 @@ const OrderList = (props) => {
                 {
                     props.orders.length > 0 &&
                     <List divided relaxed>
-                        {props.orders.map((order) => <Order key={order.order_id} id={order.order_id} date={order.created_date} />)}
+                        {props.orders.map((order) => <Order key={order.order_id} order={order}/>)}
                     </List>
                 }
             </Segment>
