@@ -9,14 +9,10 @@ class Items extends Component {
         error: undefined
     };
     calculateTotalPrice = () => {
-        return this.state.items.reduce((accumulator, currentValue) => { 
-            return { price: accumulator.price + currentValue.price } 
-        }).price;
+        return this.state.items.reduce((accumulator, currentValue) => { return accumulator + currentValue.price }, 0);
     };
     calculateTotalQuantity = () => {
-        return this.state.items.reduce((accumulator, currentValue) => { 
-            return { quantity: accumulator.quantity + currentValue.quantity } 
-        }).quantity;
+        return this.state.items.reduce((accumulator, currentValue) => { return accumulator + currentValue.quantity }, 0);
     };
     componentDidMount() {
         axios.get(`http://localhost:8080/orders/${this.props.order_id}`)
