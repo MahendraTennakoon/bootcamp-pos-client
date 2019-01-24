@@ -17,7 +17,11 @@ class App extends Component {
 
     axios.get('http://localhost:8080/orders')
       .then((response) => {
-        this.setState(() => ({ orders: response.data }));
+        if (response.data.length > 0) {
+          this.setState(() => ({ orders: response.data, error: undefined }));
+        } else {
+          this.setState(() => ({ error: 'There are no open orders!' }));
+        }
       })
       .catch((error) => {
         console.log(error);

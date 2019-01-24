@@ -11,12 +11,9 @@ const OrderList = (props) => {
             </Header>
             <Segment>
                 {
-                    props.error ? 
+                    props.error &&
                     <Message negative>
                         <Message.Header>{props.error}</Message.Header>
-                    </Message> : props.orders.length === 0 && 
-                    <Message negative>
-                        <Message.Header>There are no open orders.</Message.Header>
                     </Message>
                 }
                 {
