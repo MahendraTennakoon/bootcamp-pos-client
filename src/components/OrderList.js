@@ -24,6 +24,9 @@ const OrderList = (props) => {
                 }
             </Segment>
             <Segment attached='bottom' clearing>
+                <Message>
+                    <Message.Header>Total open orders: { props.orders.length }</Message.Header>
+                </Message>
                 <Button secondary icon labelPosition='left' floated="right">
                     <Icon name='cart plus' />
                     Create Order
