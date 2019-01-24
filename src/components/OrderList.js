@@ -11,7 +11,10 @@ const OrderList = (props) => {
             </Header>
             <Segment>
                 {
-                    props.orders.length === 0 &&
+                    props.error ? 
+                    <Message negative>
+                        <Message.Header>{props.error}</Message.Header>
+                    </Message> : props.orders.length === 0 && 
                     <Message negative>
                         <Message.Header>There are no open orders.</Message.Header>
                     </Message>
@@ -19,7 +22,7 @@ const OrderList = (props) => {
                 {
                     props.orders.length > 0 &&
                     <List divided relaxed>
-                        {props.orders.map((order) => <Order id={order.order_id} date={order.created_date} />)}
+                        {props.orders.map((order) => <Order key={order.order_id} id={order.order_id} date={order.created_date} />)}
                     </List>
                 }
             </Segment>
