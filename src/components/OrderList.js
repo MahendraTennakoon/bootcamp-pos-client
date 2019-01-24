@@ -1,6 +1,7 @@
 import React from 'react';
 import { Segment, Header, List } from 'semantic-ui-react';
 import Order from './Order';
+import { Message } from 'semantic-ui-react';
 
 const OrderList = (props) => {
     return (
@@ -9,11 +10,18 @@ const OrderList = (props) => {
                 Orders
             </Header>
             <Segment>
-                <List divided relaxed>
-                    <Order id={1} date={ '2019-01-23' } />
-                    <Order id={1} date={ '2019-01-23' } />
-                    <Order id={1} date={ '2019-01-23' } />
-                </List>
+                {
+                    props.orders.length === 0 &&
+                    <Message negative>
+                        <Message.Header>There are no open orders.</Message.Header>
+                    </Message>
+                }
+                {
+                    props.orders.length > 0 &&
+                    <List divided relaxed>
+                        {props.orders.map((order) => <Order id={order.order_id} date={order.created_date} />)}
+                    </List>
+                }
             </Segment>
         </div>
     );
