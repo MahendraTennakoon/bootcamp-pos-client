@@ -8,6 +8,16 @@ class Items extends Component {
         items: [],
         error: undefined
     };
+    calculateTotalPrice = () => {
+        return this.state.items.reduce((accumulator, currentValue) => { 
+            return { price: accumulator.price + currentValue.price } 
+        }).price;
+    };
+    calculateTotalQuantity = () => {
+        return this.state.items.reduce((accumulator, currentValue) => { 
+            return { quantity: accumulator.quantity + currentValue.quantity } 
+        }).quantity;
+    };
     componentDidMount() {
         axios.get(`http://localhost:8080/orders/${this.props.order_id}`)
             .then((response) => {
@@ -42,6 +52,15 @@ class Items extends Component {
                 <Table.Footer fullWidth>
                     <Table.Row>
                         <Table.HeaderCell />
+                        <Table.HeaderCell />
+                        <Table.HeaderCell>
+                            <strong>Total: {this.state.items.length > 0 && <span>{this.calculateTotalPrice()}</span>}</strong>
+                        </Table.HeaderCell>
+                        <Table.HeaderCell colSpan='3'>
+                            <strong>Total: {this.state.items.length > 0 && <span>{this.calculateTotalQuantity()}</span>}</strong>
+                        </Table.HeaderCell>
+                    </Table.Row>
+                    <Table.Row>
                         <Table.HeaderCell colSpan='4'>
                             <Button floated='right' icon labelPosition='left' primary size='small'>
                                 <Icon name='add' /> Add Item
