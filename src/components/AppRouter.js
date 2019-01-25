@@ -1,12 +1,13 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import App from '../App';
+import Login from './Login';
 
 const AppRouter = () => (
     <Router>
       <div>
-        <Redirect from="/" to="orders" />
-        <Route path="/orders" exact component={App} />
+        <Route path="/" exact component={App} />
+        <Route path="/login" component={Login} />
       </div>
     </Router>
   );
