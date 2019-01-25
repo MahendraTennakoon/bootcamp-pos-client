@@ -3,35 +3,15 @@ import './App.css';
 
 import Header from './components/Header';
 import OrderList from './components/OrderList';
-
 import { Container } from 'semantic-ui-react';
-const axios = require('axios');
 
 class App extends Component {
-  state = {
-    orders: [],
-    error: undefined
-  };
-  componentDidMount () {
-    axios.get('http://localhost:8080/orders')
-      .then((response) => {
-        if (response.data.length > 0) {
-          this.setState(() => ({ orders: response.data, error: undefined }));
-        } else {
-          this.setState(() => ({ error: 'There are no open orders!' }));
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        this.setState(() => ({ error: 'Error contacting server!' }));
-      });
-  };
   render() {
     return (
       <div className="App">
         <Header />
         <Container>
-          <OrderList orders={this.state.orders} error={this.state.error} />
+          <OrderList />
         </Container>
       </div>
     );
