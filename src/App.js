@@ -4,6 +4,7 @@ import './App.css';
 import Header from './components/Header';
 import OrderList from './components/OrderList';
 import { Container } from 'semantic-ui-react';
+import { Route } from "react-router-dom";
 
 class App extends Component {
   render() {
@@ -11,7 +12,7 @@ class App extends Component {
       <div className="App">
         <Header />
         <Container>
-          <OrderList />
+          <Route path="/orders" component={OrderList} />
         </Container>
       </div>
     );

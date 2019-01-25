@@ -4,12 +4,12 @@ import App from '../App';
 import Login from './Login';
 
 const AppRouter = () => (
-    <Router>
-      <div>
-        <Route path="/" exact component={App} />
-        <Route path="/login" component={Login} />
-      </div>
-    </Router>
-  );
-  
-  export default AppRouter;
+  <Router>
+    <div>
+      <Route path="/" component={App} />
+      <Route path="/login" exact component={Login} />
+    </div>
+  </Router>
+);
+
+export default AppRouter;
