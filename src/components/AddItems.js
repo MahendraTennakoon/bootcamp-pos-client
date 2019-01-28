@@ -21,7 +21,7 @@ class AddItems extends Component {
         }
 
         if (itemIndex === -1) {
-            this.newItems.push({id: item_id, quantity: parseQty});
+            this.newItems.push({ id: item_id, quantity: parseQty });
         } else {
             this.newItems[itemIndex].quantity = parseQty;
         }
@@ -36,7 +36,15 @@ class AddItems extends Component {
         axios.get(`http://localhost:8080/items`)
             .then((response) => {
                 if (response.data.length > 0) {
-                    this.setState(() => ({ items: response.data, error: undefined }));
+                    const filteredItems = response.data.filter(item => {
+                        return !this.props.existingItems.some((element) => {
+                            return element.id === item.id
+                        })
+                    });
+
+                    this.setState(() => ({
+                        items: filteredItems, error: undefined
+                    }));
                 } else {
                     this.setState(() => ({ error: 'There are no items in this order!' }));
                 }
@@ -76,10 +84,10 @@ class AddItems extends Component {
                 <Table.Footer fullWidth>
                     <Table.Row>
                         <Table.HeaderCell colSpan='4'>
-                            <Button 
-                                floated='right' 
-                                icon 
-                                labelPosition='left' 
+                            <Button
+                                floated='right'
+                                icon
+                                labelPosition='left'
                                 primary size='small'
                                 onClick={this.handleSave}
                             >

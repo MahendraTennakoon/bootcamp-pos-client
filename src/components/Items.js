@@ -80,7 +80,7 @@ class Items extends Component {
                             }>
                                 <Modal.Header>Add Items</Modal.Header>
                                 <Modal.Content>
-                                    <AddItems handleSave={this.handleSave} />
+                                    <AddItems existingItems={this.state.items} handleSave={this.handleSave} />
                                 </Modal.Content>
                             </Modal>
                         </Table.HeaderCell>
