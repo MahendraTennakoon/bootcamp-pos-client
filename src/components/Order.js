@@ -1,6 +1,7 @@
 import React from 'react';
-import { List } from 'semantic-ui-react';
+import { List, Button, Icon } from 'semantic-ui-react';
 import OrderDetails from './OrderDetails';
+import { Link } from "react-router-dom";
 
 
 const Order = (props) => {
@@ -8,6 +9,12 @@ const Order = (props) => {
         <List.Item>
             <List.Content floated='right'>
                 <OrderDetails order={props.order} />
+                <Link to={`/order/${props.order.order_id}`}>
+                    <Button icon labelPosition='left'>
+                        <Icon name='in cart' />
+                        Details
+                    </Button>
+                </Link>
             </List.Content>
             <List.Icon name='shopping cart' size='large' verticalAlign='middle' />
             <List.Content>
