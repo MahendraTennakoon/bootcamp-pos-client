@@ -13,7 +13,7 @@ class Items extends Component {
         axios
             .put(`http://localhost:8080/orders/${this.props.order_id}`, items)
             .then((response) => {
-                // TODO: Show success popup
+                this.loadItems();
             })
             .catch((error) => {
                 console.log(error);
