@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Segment, Header, Label, Message } from 'semantic-ui-react';
+import { Segment, Header, Label } from 'semantic-ui-react';
 import Items from './Items';
 
 class OrderDetails_2 extends Component {

@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import Item from './Item';
-import { Button, Icon, Table, Modal } from 'semantic-ui-react';
-import AddItems from './AddItems';
+import { Table, Button, Icon } from 'semantic-ui-react';
 const axios = require('axios');
 
-class Items extends Component {
+class AddItems extends Component {
     state = {
         items: [],
         error: undefined
@@ -16,7 +15,7 @@ class Items extends Component {
         return this.state.items.reduce((accumulator, currentValue) => { return accumulator + currentValue.quantity }, 0);
     };
     componentDidMount() {
-        axios.get(`http://localhost:8080/orders/${this.props.order_id}`)
+        axios.get(`http://localhost:8080/items`)
             .then((response) => {
                 if (response.data.length > 0) {
                     this.setState(() => ({ items: response.data, error: undefined }));
@@ -36,7 +35,7 @@ class Items extends Component {
                     <Table.Row>
                         <Table.HeaderCell>Item ID</Table.HeaderCell>
                         <Table.HeaderCell>Name</Table.HeaderCell>
-                        <Table.HeaderCell>Price</Table.HeaderCell>
+                        <Table.HeaderCell>Unit Price (LKR)</Table.HeaderCell>
                         <Table.HeaderCell>Quantity</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
@@ -45,30 +44,13 @@ class Items extends Component {
                         this.state.items.map((item) => <Item item={item} key={item.id} />)
                     }
                 </Table.Body>
-
                 <Table.Footer fullWidth>
-                    <Table.Row>
-                        <Table.HeaderCell />
-                        <Table.HeaderCell />
-                        <Table.HeaderCell>
-                            <strong>Total: {this.state.items.length > 0 && <span>{this.calculateTotalPrice()}</span>}</strong>
-                        </Table.HeaderCell>
-                        <Table.HeaderCell colSpan='3'>
-                            <strong>Total: {this.state.items.length > 0 && <span>{this.calculateTotalQuantity()}</span>}</strong>
-                        </Table.HeaderCell>
-                    </Table.Row>
+                    
                     <Table.Row>
                         <Table.HeaderCell colSpan='4'>
-                            <Modal trigger={
-                                <Button floated='right' icon labelPosition='left' primary size='small'>
-                                    <Icon name='add' /> Add Items
-                                </Button>
-                            }>
-                                <Modal.Header>Add Items</Modal.Header>
-                                <Modal.Content>
-                                    <AddItems />
-                                </Modal.Content>
-                            </Modal>
+                            <Button floated='right' icon labelPosition='left' primary size='small'>
+                                <Icon name='save' /> Save
+                            </Button>
                         </Table.HeaderCell>
                     </Table.Row>
                 </Table.Footer>
@@ -77,4 +59,4 @@ class Items extends Component {
     }
 };
 
-export default Items;
+export default AddItems;
