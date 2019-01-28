@@ -9,13 +9,24 @@ class Items extends Component {
         items: [],
         error: undefined
     };
+    handleSave = (items) => {
+        axios
+            .put(`http://localhost:8080/orders/${this.props.order_id}`, items)
+            .then((response) => {
+                // TODO: Show success popup
+            })
+            .catch((error) => {
+                console.log(error);
+                this.setState(() => ({ error: 'Error contacting server!' }));
+            });
+    }
     calculateTotalPrice = () => {
         return this.state.items.reduce((accumulator, currentValue) => { return accumulator + currentValue.price }, 0);
     };
     calculateTotalQuantity = () => {
         return this.state.items.reduce((accumulator, currentValue) => { return accumulator + currentValue.quantity }, 0);
     };
-    componentDidMount() {
+    loadItems = () => {
         axios.get(`http://localhost:8080/orders/${this.props.order_id}`)
             .then((response) => {
                 if (response.data.length > 0) {
@@ -28,6 +39,9 @@ class Items extends Component {
                 console.log(error);
                 this.setState(() => ({ error: 'Error contacting server!' }));
             });
+    };
+    componentDidMount() {
+        this.loadItems();
     }
     render() {
         return (
@@ -66,7 +80,7 @@ class Items extends Component {
                             }>
                                 <Modal.Header>Add Items</Modal.Header>
                                 <Modal.Content>
-                                    <AddItems />
+                                    <AddItems handleSave={this.handleSave} />
                                 </Modal.Content>
                             </Modal>
                         </Table.HeaderCell>

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Item from './Item';
 import { Table, Button, Icon, Input } from 'semantic-ui-react';
 const axios = require('axios');
 
@@ -8,6 +7,9 @@ class AddItems extends Component {
     state = {
         items: [],
         error: undefined
+    };
+    handleSave = () => {
+        this.props.handleSave(this.newItems);
     };
     handleChangeQuantity = (item_id, quantity) => {
         const itemIndex = this.newItems.findIndex(item => item.id === item_id);
@@ -24,7 +26,6 @@ class AddItems extends Component {
             this.newItems[itemIndex].quantity = parseQty;
         }
     }
-    handleSave
     calculateTotalPrice = () => {
         return this.state.items.reduce((accumulator, currentValue) => { return accumulator + currentValue.price }, 0);
     };
@@ -75,7 +76,13 @@ class AddItems extends Component {
                 <Table.Footer fullWidth>
                     <Table.Row>
                         <Table.HeaderCell colSpan='4'>
-                            <Button floated='right' icon labelPosition='left' primary size='small'>
+                            <Button 
+                                floated='right' 
+                                icon 
+                                labelPosition='left' 
+                                primary size='small'
+                                onClick={this.handleSave}
+                            >
                                 <Icon name='save' /> Save
                             </Button>
                         </Table.HeaderCell>
