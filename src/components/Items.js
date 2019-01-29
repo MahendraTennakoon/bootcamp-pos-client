@@ -12,9 +12,9 @@ class Items extends Component {
         // used to track whether Item quantities are being edited.
         isEditing: false
     };
-    toggleEditStatus = () => {
+    setEditStatus = (status) => {
         this.setState((prevState) => ({
-            isEditing: !prevState.isEditing
+            isEditing: status
         }));
     } 
     setItemQuantity = (item_id, quantity) => {
@@ -24,7 +24,6 @@ class Items extends Component {
         }));
     };
     handleAdd = (items) => {
-
         this.setState((prevState) => ({
             items: [...prevState.items, ...items]
         }));
@@ -93,7 +92,7 @@ class Items extends Component {
                 </Table.Header>
                 <Table.Body>
                     {
-                        this.state.items.map((item) => <Item toggleEditStatus={this.toggleEditStatus} isEditing={this.state.isEditing} setItemQuantity={this.setItemQuantity} handleRemoveItem={this.handleRemoveItem} item={item} key={item.id} />)
+                        this.state.items.map((item) => <Item setEditStatus={this.setEditStatus} isEditing={this.state.isEditing} setItemQuantity={this.setItemQuantity} handleRemoveItem={this.handleRemoveItem} item={item} key={item.id} />)
                     }
                 </Table.Body>
 

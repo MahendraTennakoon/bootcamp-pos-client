@@ -10,29 +10,34 @@ class Item extends Component {
     };
     handleCancel = () => this.setState({ open: false });
     handleSet = (e) => {
-        this.props.toggleEditStatus();
+        this.props.setEditStatus(true);
         this.setState(() => ({
-            // isEditing: true,
+            isEditing: true,
             prevQuantity: this.props.item.quantity
         }));
         this.props.setItemQuantity(this.props.item.id, this.state.quantity);
     };
     handleReset = () => {
-        this.props.toggleEditStatus();
+        this.props.setEditStatus(false);
         this.setState(() => ({
-            // isEditing: false,
+            isEditing: false,
             quantity: this.state.prevQuantity
         }));
-        this.props.setItemQuantity(this.props.item.id, this.state.prevQuantity);        
+        this.props.setItemQuantity(this.props.item.id, this.state.prevQuantity);
     };
     handleOnChangeQty = (quantity) => {
         quantity = parseInt(quantity);
-        if(isNaN(quantity)) {
+        if (isNaN(quantity)) {
             quantity = 0;
         };
         this.setState(() => ({
             quantity: quantity
         }));
+    };
+    componentDidUpdate() {
+        if(!this.props.isEditing && this.state.isEditing) {
+            this.setState(() => ({isEditing: false}));
+        }
     };
 
     render() {
@@ -46,9 +51,11 @@ class Item extends Component {
                         onChange={(e) => {
                             this.handleOnChangeQty(e.target.value);
                         }}
-                        action={this.props.isEditing ? <Button onClick={this.handleReset}>Reset</Button> : <Button onClick={this.handleSet}>Set</Button>}
+                        // action={this.state.isEditing ? <Button onClick={this.handleReset}>Reset</Button> : <Button onClick={this.handleSet}>Set</Button>}
                         value={this.state.quantity}
+                        disabled={this.state.isEditing}
                     />
+                    {this.state.isEditing ? <Button onClick={this.handleReset}>Reset</Button> : <Button onClick={this.handleSet}>Set</Button>}
                 </Table.Cell>
                 <Table.Cell>
                     <Button
