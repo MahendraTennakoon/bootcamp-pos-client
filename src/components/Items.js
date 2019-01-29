@@ -15,8 +15,6 @@ class Items extends Component {
         this.setState((prevState) => ({
             items: [...prevState.items, ...items]
         }));
-
-        console.log(this.state.items);
     };
     handleRemoveItem = (item_id) => {
         axios
