@@ -2,16 +2,29 @@ import React, { Component } from 'react';
 import Item from './Item';
 import { Button, Icon, Table, Modal } from 'semantic-ui-react';
 import AddItems from './AddItems';
+import update from 'immutability-helper';
 const axios = require('axios');
 
 class Items extends Component {
     state = {
         items: [],
         error: undefined,
-        edited: false
+        // used to track whether Item quantities are being edited.
+        isEditing: false
+    };
+    toggleEditStatus = () => {
+        this.setState((prevState) => ({
+            isEditing: !prevState.isEditing
+        }));
+    } 
+    setItemQuantity = (item_id, quantity) => {
+        const index = this.state.items.findIndex(item => item.id === item_id);
+        this.setState(() => ({
+            items: update(this.state.items, { [index]: { quantity: { $set: quantity } } })
+        }));
     };
     handleAdd = (items) => {
-        
+
         this.setState((prevState) => ({
             items: [...prevState.items, ...items]
         }));
@@ -44,7 +57,7 @@ class Items extends Component {
             });
     };
     calculateTotalPrice = () => {
-        return this.state.items.reduce((accumulator, currentValue) => { return accumulator + currentValue.price }, 0);
+        return this.state.items.reduce((accumulator, currentValue) => { return accumulator + currentValue.quantity * currentValue.price }, 0);
     };
     calculateTotalQuantity = () => {
         return this.state.items.reduce((accumulator, currentValue) => { return accumulator + currentValue.quantity }, 0);
@@ -53,7 +66,7 @@ class Items extends Component {
         axios.get(`http://localhost:8080/orders/${this.props.order_id}`)
             .then((response) => {
                 if (response.data.length > 0) {
-                    this.setState(() => ({ items: response.data, error: undefined }));
+                    this.setState(() => ({ items: response.data, error: undefined, isEditing: false }));
                 } else {
                     this.setState(() => ({ error: 'There are no items in this order!' }));
                 }
@@ -80,7 +93,7 @@ class Items extends Component {
                 </Table.Header>
                 <Table.Body>
                     {
-                        this.state.items.map((item) => <Item handleRemoveItem={this.handleRemoveItem} item={item} key={item.id} />)
+                        this.state.items.map((item) => <Item toggleEditStatus={this.toggleEditStatus} isEditing={this.state.isEditing} setItemQuantity={this.setItemQuantity} handleRemoveItem={this.handleRemoveItem} item={item} key={item.id} />)
                     }
                 </Table.Body>
 
@@ -111,21 +124,21 @@ class Items extends Component {
                     </Table.Row>
                     <Table.Row>
                         <Table.HeaderCell colSpan='5'>
-                            <Button 
-                                floated='right' 
-                                icon 
-                                labelPosition='left' 
-                                negative 
+                            <Button
+                                floated='right'
+                                icon
+                                labelPosition='left'
+                                negative
                                 size='small'
                                 onClick={this.handleDiscard}
                             >
                                 <Icon name='cancel' /> Discard
                             </Button>
-                            <Button 
-                                floated='right' 
-                                icon 
-                                labelPosition='left' 
-                                color='black' 
+                            <Button
+                                floated='right'
+                                icon
+                                labelPosition='left'
+                                color='black'
                                 size='small'
                                 onClick={this.handleSave}
                             >
