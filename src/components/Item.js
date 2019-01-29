@@ -36,7 +36,7 @@ class Item extends Component {
     };
     componentDidUpdate() {
         if(!this.props.isEditing && this.state.isEditing) {
-            this.setState(() => ({isEditing: false}));
+            this.setState(() => ({isEditing: false, quantity: this.props.item.quantity}));
         }
     };
 
