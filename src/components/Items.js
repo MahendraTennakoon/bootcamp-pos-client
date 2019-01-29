@@ -18,6 +18,17 @@ class Items extends Component {
 
         console.log(this.state.items);
     };
+    handleRemoveItem = (item_id) => {
+        axios
+            .delete(`http://localhost:8080/orders/${this.props.order_id}/${item_id}`)
+            .then((response) => {
+                this.loadItems();
+            })
+            .catch((error) => {
+                console.log(error);
+                this.setState(() => ({ error: 'Error contacting server!' }));
+            });
+    };
     handleDiscard = () => {
         // TODO: Add a loader
         // TODO: Use Redux
@@ -71,7 +82,7 @@ class Items extends Component {
                 </Table.Header>
                 <Table.Body>
                     {
-                        this.state.items.map((item) => <Item item={item} key={item.id} />)
+                        this.state.items.map((item) => <Item handleRemoveItem={this.handleRemoveItem} item={item} key={item.id} />)
                     }
                 </Table.Body>
 
