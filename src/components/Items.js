@@ -9,18 +9,11 @@ class Items extends Component {
     state = {
         items: [],
         error: undefined,
-        // used to track whether Item quantities are being edited.
-        isEditing: false
     };
-    setEditStatus = (status) => {
-        this.setState((prevState) => ({
-            isEditing: status
-        }));
-    } 
-    setItemQuantity = (item_id, quantity) => {
+    setItemQuantity = (item_id, quantity, edit_status) => {
         const index = this.state.items.findIndex(item => item.id === item_id);
         this.setState(() => ({
-            items: update(this.state.items, { [index]: { quantity: { $set: quantity } } })
+            items: update(this.state.items, { [index]: { quantity: { $set: quantity }, isEditing: { $set: edit_status } } })
         }));
     };
     handleAdd = (items) => {
@@ -92,7 +85,7 @@ class Items extends Component {
                 </Table.Header>
                 <Table.Body>
                     {
-                        this.state.items.map((item) => <Item setEditStatus={this.setEditStatus} isEditing={this.state.isEditing} setItemQuantity={this.setItemQuantity} handleRemoveItem={this.handleRemoveItem} item={item} key={item.id} />)
+                        this.state.items.map((item) => <Item setItemQuantity={this.setItemQuantity} handleRemoveItem={this.handleRemoveItem} item={item} key={item.id} />)
                     }
                 </Table.Body>
 
