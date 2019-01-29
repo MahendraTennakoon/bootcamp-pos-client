@@ -8,10 +8,10 @@ class AddItems extends Component {
         items: [],
         error: undefined
     };
-    handleSave = () => {
-        this.props.handleSave(this.newItems);
+    handleAdd = () => {
+        this.props.handleAdd(this.newItems);
     };
-    handleChangeQuantity = (item_id, quantity) => {
+    handleChangeQuantity = (item_id, name, price, quantity) => {
         const itemIndex = this.newItems.findIndex(item => item.id === item_id);
 
         let parseQty = parseInt(quantity, 10);
@@ -21,7 +21,7 @@ class AddItems extends Component {
         }
 
         if (itemIndex === -1) {
-            this.newItems.push({ id: item_id, quantity: parseQty });
+            this.newItems.push({ id: item_id, name: name, price: price, quantity: parseQty });
         } else {
             this.newItems[itemIndex].quantity = parseQty;
         }
@@ -74,7 +74,7 @@ class AddItems extends Component {
                                 <Table.Cell>{item.price}</Table.Cell>
                                 <Table.Cell>
                                     <Input placeholder='0' onChange={(e) => {
-                                        this.handleChangeQuantity(item.id, e.target.value);
+                                        this.handleChangeQuantity(item.id, item.name, item.price, e.target.value);
                                     }} />
                                 </Table.Cell>
                             </Table.Row>
@@ -89,9 +89,9 @@ class AddItems extends Component {
                                 icon
                                 labelPosition='left'
                                 primary size='small'
-                                onClick={this.handleSave}
+                                onClick={this.handleAdd}
                             >
-                                <Icon name='save' /> Save
+                                <Icon name='save' /> Add
                             </Button>
                         </Table.HeaderCell>
                     </Table.Row>

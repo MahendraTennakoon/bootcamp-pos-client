@@ -7,11 +7,25 @@ const axios = require('axios');
 class Items extends Component {
     state = {
         items: [],
-        error: undefined
+        error: undefined,
+        edited: false
     };
-    handleSave = (items) => {
+    handleAdd = (items) => {
+        
+        this.setState((prevState) => ({
+            items: [...prevState.items, ...items]
+        }));
+
+        console.log(this.state.items);
+    };
+    handleDiscard = () => {
+        // TODO: Add a loader
+        // TODO: Use Redux
+        this.loadItems();
+    }
+    handleSave = () => {
         axios
-            .put(`http://localhost:8080/orders/${this.props.order_id}`, items)
+            .put(`http://localhost:8080/orders/${this.props.order_id}`, this.state.items)
             .then((response) => {
                 this.loadItems();
             })
@@ -19,7 +33,7 @@ class Items extends Component {
                 console.log(error);
                 this.setState(() => ({ error: 'Error contacting server!' }));
             });
-    }
+    };
     calculateTotalPrice = () => {
         return this.state.items.reduce((accumulator, currentValue) => { return accumulator + currentValue.price }, 0);
     };
@@ -80,9 +94,33 @@ class Items extends Component {
                             }>
                                 <Modal.Header>Add Items</Modal.Header>
                                 <Modal.Content>
-                                    <AddItems existingItems={this.state.items} handleSave={this.handleSave} />
+                                    <AddItems existingItems={this.state.items} handleAdd={this.handleAdd} />
                                 </Modal.Content>
                             </Modal>
+                        </Table.HeaderCell>
+                    </Table.Row>
+                    <Table.Row>
+                        <Table.HeaderCell colSpan='4'>
+                            <Button 
+                                floated='right' 
+                                icon 
+                                labelPosition='left' 
+                                negative 
+                                size='small'
+                                onClick={this.handleDiscard}
+                            >
+                                <Icon name='cancel' /> Discard
+                            </Button>
+                            <Button 
+                                floated='right' 
+                                icon 
+                                labelPosition='left' 
+                                color='black' 
+                                size='small'
+                                onClick={this.handleSave}
+                            >
+                                <Icon name='save' /> Save
+                            </Button>
                         </Table.HeaderCell>
                     </Table.Row>
                 </Table.Footer>
