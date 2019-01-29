@@ -66,6 +66,7 @@ class Items extends Component {
                         <Table.HeaderCell>Name</Table.HeaderCell>
                         <Table.HeaderCell>Price</Table.HeaderCell>
                         <Table.HeaderCell>Quantity</Table.HeaderCell>
+                        <Table.HeaderCell></Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
@@ -86,7 +87,7 @@ class Items extends Component {
                         </Table.HeaderCell>
                     </Table.Row>
                     <Table.Row>
-                        <Table.HeaderCell colSpan='4'>
+                        <Table.HeaderCell colSpan='5'>
                             <Modal trigger={
                                 <Button floated='right' icon labelPosition='left' primary size='small'>
                                     <Icon name='add' /> Add Items
@@ -100,7 +101,7 @@ class Items extends Component {
                         </Table.HeaderCell>
                     </Table.Row>
                     <Table.Row>
-                        <Table.HeaderCell colSpan='4'>
+                        <Table.HeaderCell colSpan='5'>
                             <Button 
                                 floated='right' 
                                 icon 
