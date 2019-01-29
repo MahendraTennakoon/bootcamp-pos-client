@@ -5,7 +5,7 @@ import Header from './components/Header';
 import OrderList from './components/OrderList';
 import { Container } from 'semantic-ui-react';
 import { Route } from "react-router-dom";
-import OrderDetails_2 from "./components/OrderDetails_2";
+import OrderDetails from "./components/OrderDetails";
 
 class App extends Component {
   render() {
@@ -14,7 +14,7 @@ class App extends Component {
         <Header />
         <Container>
           <Route path="/orders" component={OrderList} />
-          <Route path="/order/:order_id" component={OrderDetails_2} />
+          <Route path="/order/:order_id" component={OrderDetails} />
         </Container>
       </div>
     );

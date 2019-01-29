@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Segment, Header, Label } from 'semantic-ui-react';
 import Items from './Items';
 
-class OrderDetails_2 extends Component {
+class OrderDetails extends Component {
     render() {
         return (
             <div>
@@ -18,4 +18,4 @@ class OrderDetails_2 extends Component {
     };
 }
 
-export default OrderDetails_2;
+export default OrderDetails;
