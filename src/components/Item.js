@@ -1,29 +1,44 @@
-import React from 'react';
-import { Table, Button, Icon } from 'semantic-ui-react';
+import React, { Component } from 'react';
+import { Table, Button, Icon, Confirm } from 'semantic-ui-react';
 
-const Item = (props) => {
-    const handleRemove = () => {
-        props.handleRemoveItem(props.item.id);
+class Item extends Component {
+    state = { open: false }
+    showConfirm = () => this.setState({ open: true })
+    handleConfirm = () => {
+        this.setState({ open: false })
+        this.props.handleRemoveItem(this.props.item.id);
     };
-    return (
-        <Table.Row>
-            <Table.Cell>{props.item.id}</Table.Cell>
-            <Table.Cell>{props.item.name}</Table.Cell>
-            <Table.Cell>{props.item.price}</Table.Cell>
-            <Table.Cell>{props.item.quantity}</Table.Cell>
-            <Table.Cell>
-                <Button 
-                    icon 
-                    labelPosition='left' 
-                    color="black" 
-                    size='small'
-                    onClick={handleRemove}
-                >
-                    <Icon name='remove circle' /> Remove
-                </Button>
-            </Table.Cell>
-        </Table.Row>
-    );
+    handleCancel = () => this.setState({ open: false })
+
+    render() {
+        return (
+            <Table.Row>
+                <Table.Cell>{this.props.item.id}</Table.Cell>
+                <Table.Cell>{this.props.item.name}</Table.Cell>
+                <Table.Cell>{this.props.item.price}</Table.Cell>
+                <Table.Cell>{this.props.item.quantity}</Table.Cell>
+                <Table.Cell>
+                    <Button
+                        icon
+                        labelPosition='left'
+                        color="black"
+                        size='small'
+                        onClick={this.showConfirm}
+                    >
+                        <Icon name='remove circle' /> Remove
+                    </Button>
+                    <Confirm
+                        open={this.state.open}
+                        onCancel={this.handleCancel}
+                        onConfirm={this.handleConfirm}
+                        content='Are you sure you want to remove this item?'
+                        cancelButton='No'
+                        confirmButton="Yes"
+                    />
+                </Table.Cell>
+            </Table.Row>
+        );
+    }
 };
 
 
