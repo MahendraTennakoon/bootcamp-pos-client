@@ -1,12 +1,27 @@
 import React, { Component } from 'react';
-import { Container, Segment, Header, Form, Button } from 'semantic-ui-react';
+import { Container, Segment, Header, Form, Button, Message } from 'semantic-ui-react';
+const axios = require('axios');
 
 class Login extends Component {
+    state = {
+        error: undefined
+    };
     validateCredentials = (e) => {
-        const username = e.target.elements["username"].value;
-        const password = e.target.elements["password"].value;
-        
-        this.props.history.push('/orders');
+        const credentials = {
+            user_name: e.target.elements["username"].value,
+            password: e.target.elements["password"].value
+        };
+
+        axios.post(`http://localhost:8080/sessions`, credentials)
+            .then((response) => {
+                this.props.history.push('/orders');
+            })
+            .catch((error) => {
+                this.setState(() => ({
+                    error: 'Invalid user name or password.'
+                }));
+            });
+
     }
     render() {
         return (
@@ -26,6 +41,13 @@ class Login extends Component {
                                 <input name="password" placeholder='Password' type="password" />
                             </Form.Field>
                             <Button type='submit'>Log In</Button>
+                            {
+                                this.state.error && 
+                                <Message negative>
+                                    <Message.Header>Error!</Message.Header>
+                                    <p>{this.state.error}</p>
+                                </Message>
+                            }
                         </Form>
                     </Segment>
                 </Container>
