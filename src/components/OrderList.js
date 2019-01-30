@@ -2,27 +2,16 @@ import React, { Component } from 'react';
 import { Segment, Header, List } from 'semantic-ui-react';
 import Order from './Order';
 import { Message, Button, Icon } from 'semantic-ui-react';
-const axios = require('axios');
+import { connect } from 'react-redux';
+import { addOrder, fetchOrders } from '../actions/index';
 
 class OrderList extends Component {
     state = {
-        orders: [],
         error: undefined
-      };
-      componentDidMount () {
-        axios.get('http://localhost:8080/orders')
-          .then((response) => {
-            if (response.data.length > 0) {
-              this.setState(() => ({ orders: response.data, error: undefined }));
-            } else {
-              this.setState(() => ({ error: 'There are no open orders!' }));
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-            this.setState(() => ({ error: 'Error contacting server!' }));
-          });
-      };
+    };
+    componentDidMount() {
+        this.props.fetchOrders();
+    };
     render() {
         return (
             <div>
@@ -31,21 +20,21 @@ class OrderList extends Component {
                 </Header>
                 <Segment attached>
                     {
-                        this.state.error &&
+                        this.props.server_error &&
                         <Message negative>
-                            <Message.Header>{this.state.error}</Message.Header>
+                            <Message.Header>{this.props.server_error}</Message.Header>
                         </Message>
                     }
                     {
-                        this.state.orders.length > 0 &&
+                        this.props.orders && this.props.orders.length > 0 &&
                         <List divided relaxed>
-                            {this.state.orders.map((order) => <Order key={order.order_id} order={order} />)}
+                            {this.props.orders.map((order) => <Order key={order.order_id} order={order} />)}
                         </List>
                     }
                 </Segment>
                 <Segment attached='bottom' clearing>
                     <Message compact info>
-                        Total Open Orders: <strong>{this.state.orders.length}</strong>
+                        Total Open Orders: <strong>{this.props.orders.length}</strong>
                     </Message>
                     <Button secondary icon labelPosition='left' floated="right">
                         <Icon name='cart plus' />
@@ -57,4 +46,17 @@ class OrderList extends Component {
     }
 };
 
-export default OrderList;
+const mapStateToProps = state => {
+    return {
+        orders: state.orders,
+        server_error: state.server_error
+    }
+};
+const mapDispatchToProps = (dispatch) => {
+    return {
+        addOrder: order => dispatch(addOrder(order)),
+        fetchOrders: () => dispatch(fetchOrders())
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(OrderList);
