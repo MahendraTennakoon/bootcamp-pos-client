@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import { Table, Button, Icon, Input } from 'semantic-ui-react';
-const axios = require('axios');
+import { Table, Button, Icon, Input, Message } from 'semantic-ui-react';
+import { connect } from 'react-redux';
 
 class AddItems extends Component {
     newItems = [];
     state = {
-        items: [],
-        error: undefined
+        filteredItems: []
     };
     handleAdd = () => {
         this.props.handleAdd(this.newItems);
@@ -27,32 +26,21 @@ class AddItems extends Component {
         }
     }
     calculateTotalPrice = () => {
-        return this.state.items.reduce((accumulator, currentValue) => { return accumulator + currentValue.price }, 0);
+        return this.state.filteredItems.reduce((accumulator, currentValue) => { return accumulator + currentValue.price }, 0);
     };
     calculateTotalQuantity = () => {
-        return this.state.items.reduce((accumulator, currentValue) => { return accumulator + currentValue.quantity }, 0);
+        return this.state.filteredItems.reduce((accumulator, currentValue) => { return accumulator + currentValue.quantity }, 0);
     };
     componentDidMount() {
-        axios.get(`http://localhost:8080/items`)
-            .then((response) => {
-                if (response.data.length > 0) {
-                    const filteredItems = response.data.filter(item => {
-                        return !this.props.existingItems.some((element) => {
-                            return element.id === item.id
-                        })
-                    });
-
-                    this.setState(() => ({
-                        items: filteredItems, error: undefined
-                    }));
-                } else {
-                    this.setState(() => ({ error: 'There are no items in this order!' }));
-                }
+        const filteredItems = this.props.items.filter(item => {
+            return !this.props.existingItems.some((element) => {
+                return element.id === item.id
             })
-            .catch((error) => {
-                console.log(error);
-                this.setState(() => ({ error: 'Error contacting server!' }));
-            });
+        });
+
+        this.setState(() => ({
+            filteredItems: filteredItems
+        }));
     }
     render() {
         return (
@@ -67,7 +55,7 @@ class AddItems extends Component {
                 </Table.Header>
                 <Table.Body>
                     {
-                        this.state.items.map((item) => (
+                        this.state.filteredItems.map((item) => (
                             <Table.Row key={item.id}>
                                 <Table.Cell>{item.id}</Table.Cell>
                                 <Table.Cell>{item.name}</Table.Cell>
@@ -101,4 +89,11 @@ class AddItems extends Component {
     }
 };
 
-export default AddItems;
+const mapStateToProps = state => {
+    return {
+        items: state.items,
+        server_error: state.server_error
+    }
+};
+
+export default connect(mapStateToProps)(AddItems);
