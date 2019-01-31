@@ -9,6 +9,12 @@ class OrderList extends Component {
     state = {
         error: undefined
     };
+    componentDidUpdate() {
+        console.log(this.props.created_order_id);
+        if(this.props.created_order_id) {
+            this.props.history.push(`/orders/${this.props.created_order_id}`);
+        }
+    }
     componentDidMount() {
         this.props.fetchOrders();
     };
@@ -63,7 +69,8 @@ class OrderList extends Component {
 const mapStateToProps = state => {
     return {
         orders: state.orders,
-        server_error: state.server_error
+        server_error: state.server_error,
+        created_order_id: state.created_order_id
     }
 };
 const mapDispatchToProps = (dispatch) => {

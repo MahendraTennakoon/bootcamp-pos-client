@@ -3,7 +3,8 @@ import { ADD_ORDER, ORDERS_FETCHED, SERVER_ERROR, ITEMS_FETCHED, CREATE_ORDER_ER
 const initialState = {
     orders: [],
     items: [],
-    server_error: undefined
+    server_error: undefined,
+    created_order_id: undefined
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -29,6 +30,11 @@ const rootReducer = (state = initialState, action) => {
             return {
                 orders: [],
                 server_error: 'Error contacting server!'
+            }
+        case CREATE_ORDER_SUCCESS:
+            return {
+                ...state,
+                created_order_id: action.payload.order_id
             }
         case CREATE_ORDER_ERROR:
             return {

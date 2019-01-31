@@ -38,7 +38,7 @@ export const createOrder = (order) => {
     return function (dispatch) {
         axios.post('http://localhost:8080/orders', order)
             .then((response) => {
-                dispatch({ type: CREATE_ORDER_SUCCESS });
+                dispatch({ type: CREATE_ORDER_SUCCESS, payload: response.data });
             })
             .catch((error) => {
                 console.log(error);
