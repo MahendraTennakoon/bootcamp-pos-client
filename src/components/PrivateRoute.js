@@ -4,7 +4,7 @@ import {
     Redirect,
   } from "react-router-dom";
 
-  const fakeAuth = {
+  const authStore = {
     authenticate(cb) {
         console.log(localStorage.getItem('isAuthenticated'));
       this.isAuthenticated = true;
@@ -19,7 +19,7 @@ import {
 
 const PrivateRoute = ({component: Component, ...rest}) => (
     <Route {...rest} render={(props) => {
-      if (fakeAuth.isAuthenticated()) {
+      if (authStore.isAuthenticated()) {
         return <Component {...props} />
       } else {
         return <Redirect to='/login' />
