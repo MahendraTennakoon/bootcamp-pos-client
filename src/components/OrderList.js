@@ -3,7 +3,7 @@ import { Segment, Header, List } from 'semantic-ui-react';
 import Order from './Order';
 import { Message, Button, Icon } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { addOrder, fetchOrders } from '../actions/index';
+import { addOrder, fetchOrders, createOrder } from '../actions/index';
 
 class OrderList extends Component {
     state = {
@@ -11,6 +11,14 @@ class OrderList extends Component {
     };
     componentDidMount() {
         this.props.fetchOrders();
+    };
+    createOrder = () => {
+        var options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+        var today = new Date();
+        const order = {
+            created_date: today.toLocaleDateString("en-US", options)
+        }
+        this.props.createOrder(order);
     };
     render() {
         return (
@@ -36,7 +44,13 @@ class OrderList extends Component {
                     <Message compact info>
                         Total Open Orders: <strong>{this.props.orders.length}</strong>
                     </Message>
-                    <Button secondary icon labelPosition='left' floated="right">
+                    <Button
+                        secondary
+                        icon
+                        labelPosition='left'
+                        floated="right"
+                        onClick={this.createOrder}
+                    >
                         <Icon name='cart plus' />
                         Create Order
                     </Button>
@@ -55,7 +69,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch) => {
     return {
         addOrder: order => dispatch(addOrder(order)),
-        fetchOrders: () => dispatch(fetchOrders())
+        fetchOrders: () => dispatch(fetchOrders()),
+        createOrder: (order) => dispatch(createOrder(order))
     }
 };
 

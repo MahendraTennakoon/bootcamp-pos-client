@@ -1,4 +1,4 @@
-import { ADD_ORDER, ORDERS_FETCHED, SERVER_ERROR, ITEMS_FETCHED } from '../constants/actionTypes';
+import { ADD_ORDER, ORDERS_FETCHED, SERVER_ERROR, ITEMS_FETCHED, CREATE_ORDER_ERROR, CREATE_ORDER_SUCCESS } from '../constants/actionTypes';
 
 const initialState = {
     orders: [],
@@ -29,6 +29,11 @@ const rootReducer = (state = initialState, action) => {
             return {
                 orders: [],
                 server_error: 'Error contacting server!'
+            }
+        case CREATE_ORDER_ERROR:
+            return {
+                ...state,
+                server_error: 'Error creating order!'
             }
         default:
             return state;
