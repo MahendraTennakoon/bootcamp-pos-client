@@ -3,16 +3,16 @@ import { Segment, Header, List } from 'semantic-ui-react';
 import Order from './Order';
 import { Message, Button, Icon } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { addOrder, fetchOrders, createOrder } from '../actions/index';
+import { addOrder, fetchOrders, createOrder, resetCreatedOrderId } from '../actions/index';
 
 class OrderList extends Component {
     state = {
         error: undefined
     };
     componentDidUpdate() {
-        console.log(this.props.created_order_id);
         if(this.props.created_order_id) {
             this.props.history.push(`/orders/${this.props.created_order_id}`);
+            this.props.resetCreatedOrderId();
         }
     }
     componentDidMount() {
@@ -77,7 +77,8 @@ const mapDispatchToProps = (dispatch) => {
     return {
         addOrder: order => dispatch(addOrder(order)),
         fetchOrders: () => dispatch(fetchOrders()),
-        createOrder: (order) => dispatch(createOrder(order))
+        createOrder: (order) => dispatch(createOrder(order)),
+        resetCreatedOrderId: () => dispatch(resetCreatedOrderId())
     }
 };
 

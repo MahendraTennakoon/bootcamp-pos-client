@@ -1,4 +1,4 @@
-import { ADD_ORDER, ORDERS_FETCHED, SERVER_ERROR, ITEMS_FETCHED ,CREATE_ORDER_SUCCESS, CREATE_ORDER_ERROR } from '../constants/actionTypes';
+import { ADD_ORDER, ORDERS_FETCHED, SERVER_ERROR, ITEMS_FETCHED ,CREATE_ORDER_SUCCESS, CREATE_ORDER_ERROR, RESET_CREATED_ORDER_ID } from '../constants/actionTypes';
 const axios = require('axios');
 
 export const addOrder = (payload) => {
@@ -7,6 +7,12 @@ export const addOrder = (payload) => {
         payload
     };
 };
+
+export const resetCreatedOrderId = () => {
+    return {
+        type: RESET_CREATED_ORDER_ID
+    }
+}
 
 export const fetchOrders = () => {
     return function (dispatch) {
