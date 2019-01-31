@@ -14,6 +14,7 @@ class Login extends Component {
 
         axios.post(`http://localhost:8080/sessions`, credentials)
             .then((response) => {
+                localStorage.setItem('isAuthenticated', 'true');
                 this.props.history.push('/orders');
             })
             .catch((error) => {
