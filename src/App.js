@@ -4,8 +4,8 @@ import './App.css';
 import Header from './components/Header';
 import OrderList from './components/OrderList';
 import { Container } from 'semantic-ui-react';
-import { Route } from "react-router-dom";
 import OrderDetails from "./components/OrderDetails";
+import PrivateRoute from './components/PrivateRoute';
 
 class App extends Component {
   render() {
@@ -13,8 +13,8 @@ class App extends Component {
       <div className="App">
         <Header />
         <Container>
-          <Route path="/orders" component={OrderList} />
-          <Route path="/order/:order_id" component={OrderDetails} />
+          <PrivateRoute path="/orders" component={OrderList} />
+          <PrivateRoute path="/order/:order_id" component={OrderDetails} />
         </Container>
       </div>
     );
