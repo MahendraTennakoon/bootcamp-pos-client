@@ -6,6 +6,7 @@ import OrderList from './components/OrderList';
 import { Container } from 'semantic-ui-react';
 import OrderDetails from "./components/OrderDetails";
 import PrivateRoute from './components/PrivateRoute';
+import { Route, Redirect } from 'react-router-dom'
 
 class App extends Component {
   render() {
@@ -13,8 +14,11 @@ class App extends Component {
       <div className="App">
         <Header />
         <Container>
-          <PrivateRoute path="/orders" component={OrderList} />
-          <PrivateRoute path="/order/:order_id" component={OrderDetails} />
+          <Route exact path="/" render={() => (
+            <Redirect to="/orders" />
+          )} />
+          <PrivateRoute exact path="/orders" component={OrderList} />
+          <PrivateRoute path="/orders/:order_id" component={OrderDetails} />
         </Container>
       </div>
     );

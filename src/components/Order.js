@@ -7,7 +7,7 @@ const Order = (props) => {
     return (
         <List.Item>
             <List.Content floated='right'>
-                <Link to={`/order/${props.order.order_id}`}>
+                <Link to={`/orders/${props.order.order_id}`}>
                     <Button icon labelPosition='left'>
                         <Icon name='in cart' />
                         Details

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Button, Icon, Input, Message } from 'semantic-ui-react';
+import { Table, Button, Icon, Input } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
 class AddItems extends Component {
