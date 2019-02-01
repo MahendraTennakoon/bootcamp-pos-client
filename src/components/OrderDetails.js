@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Segment, Header, Label, Breadcrumb } from 'semantic-ui-react';
+import { Segment, Header, Label, Breadcrumb, Message, Icon } from 'semantic-ui-react';
 import Items from './Items';
 import { Link } from "react-router-dom";
 
@@ -21,6 +21,10 @@ class OrderDetails extends Component {
                     <Label attached='top'>ORDER ID: {this.props.match.params.order_id}</Label>
                     <Items order_id={this.props.match.params.order_id} />
                 </Segment>
+                <Message attached='bottom' warning>
+                    <Icon name='info circle' />
+                    Undiscarded changes will be automatically saved if you navigate away from this page.
+                </Message>
             </div>
         );
     };
