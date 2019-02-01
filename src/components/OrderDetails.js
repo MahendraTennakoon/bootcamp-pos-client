@@ -10,11 +10,11 @@ class OrderDetails extends Component {
             <div>
                 <Header as='h1' block color="blue">
                     <Breadcrumb size="massive">
-                        <Breadcrumb.Section link>
+                        <Breadcrumb.Section>
                             <Link to={'/orders'}>Orders</Link>
                         </Breadcrumb.Section>
                         <Breadcrumb.Divider icon='right angle' />
-                        <Breadcrumb.Section link>Order Details</Breadcrumb.Section>
+                        <Breadcrumb.Section>Order Details</Breadcrumb.Section>
                     </Breadcrumb>
                 </Header>
                 <Segment attached>
