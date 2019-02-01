@@ -98,7 +98,7 @@ class Items extends Component {
                                 <Table.Row>
                                     <Table.HeaderCell>Item ID</Table.HeaderCell>
                                     <Table.HeaderCell>Name</Table.HeaderCell>
-                                    <Table.HeaderCell>Price</Table.HeaderCell>
+                                    <Table.HeaderCell>Price (LKR)</Table.HeaderCell>
                                     <Table.HeaderCell>Quantity</Table.HeaderCell>
                                     <Table.HeaderCell></Table.HeaderCell>
                                 </Table.Row>
