@@ -81,7 +81,10 @@ class Items extends Component {
     componentDidMount() {
         this.loadItems();
         this.props.fetchItems();
-    }
+    };
+    componentWillUnmount() {
+        this.handleSave();
+    };
     render() {
         return (
             <div>
