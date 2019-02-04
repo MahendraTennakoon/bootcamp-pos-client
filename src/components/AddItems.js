@@ -61,7 +61,7 @@ class AddItems extends Component {
                                 <Table.Cell>{item.name}</Table.Cell>
                                 <Table.Cell>{item.price}</Table.Cell>
                                 <Table.Cell>
-                                    <Input placeholder='0' onChange={(e) => {
+                                    <Input type="number" min={0} placeholder='0' onChange={(e) => {
                                         this.handleChangeQuantity(item.id, item.name, item.price, e.target.value);
                                     }} />
                                 </Table.Cell>
