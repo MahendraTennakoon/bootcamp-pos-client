@@ -7,22 +7,34 @@ class Login extends Component {
         error: undefined
     };
     validateCredentials = (e) => {
-        const credentials = {
-            user_name: e.target.elements["username"].value,
-            password: e.target.elements["password"].value
-        };
+        const user_name = e.target.elements["username"].value;
+        const password = e.target.elements["password"].value;
 
-        axios.post(`http://localhost:8080/sessions`, credentials)
-            .then((response) => {
-                localStorage.setItem('isAuthenticated', 'true');
-                this.props.history.push('/orders');
-            })
-            .catch((error) => {
-                this.setState(() => ({
-                    error: 'Invalid user name or password.'
-                }));
-            });
-
+        if (!user_name) {
+            this.setState(() => ({
+                error: 'User name can not be empty.'
+            }));
+        } else if (!password) {
+            this.setState(() => ({
+                error: 'Password can not be empty.'
+            }));
+        } else {
+            const credentials = {
+                user_name: user_name,
+                password: password
+            };
+    
+            axios.post(`http://localhost:8080/sessions`, credentials)
+                .then((response) => {
+                    localStorage.setItem('isAuthenticated', 'true');
+                    this.props.history.push('/orders');
+                })
+                .catch((error) => {
+                    this.setState(() => ({
+                        error: 'Invalid user name or password.'
+                    }));
+                });
+        }
     }
     render() {
         return (
@@ -43,7 +55,7 @@ class Login extends Component {
                             </Form.Field>
                             <Button type='submit'>Log In</Button>
                             {
-                                this.state.error && 
+                                this.state.error &&
                                 <Message negative>
                                     <Message.Header>Error!</Message.Header>
                                     <p>{this.state.error}</p>
