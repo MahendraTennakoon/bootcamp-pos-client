@@ -28,6 +28,19 @@ export const addOrderItems = (payload) => {
     }
 };
 
+export const saveOrderItems = (order_id, items) => {
+    return function (dispatch) {
+        axios
+            .put(`http://localhost:8080/orders/${order_id}`, items)
+            .then(() => {
+                dispatch(fetchOrderItems(order_id));
+            })
+            .catch((error) => {
+                dispatch({ type: SERVER_ERROR });
+            });
+    }
+}
+
 export const removeOrderItem = (order_id, item_id) => {
     return function (dispatch) {
         axios

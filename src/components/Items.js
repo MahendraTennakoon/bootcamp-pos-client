@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import Item from './Item';
 import { Button, Icon, Table, Modal, Message } from 'semantic-ui-react';
 import AddItems from './AddItems';
-import { fetchItems, addOrder, fetchOrderItems, setItemQuantity, addOrderItems, removeOrderItem } from '../actions/index';
+import { fetchItems, addOrder, fetchOrderItems, setItemQuantity, addOrderItems, removeOrderItem, saveOrderItems } from '../actions/index';
 import { connect } from 'react-redux';
-const axios = require('axios');
 
 class Items extends Component {
     state = {
@@ -37,17 +36,8 @@ class Items extends Component {
         // TODO: Add a loader
         this.props.fetchOrderItems(this.props.order_id);
     }
-    // TODO: redux
     handleSave = () => {
-        axios
-            .put(`http://localhost:8080/orders/${this.props.order_id}`, this.props.order_items)
-            .then((response) => {
-                this.props.fetchOrderItems(this.props.order_id);
-            })
-            .catch((error) => {
-                console.log(error);
-                this.setState(() => ({ error: 'Error contacting server!' }));
-            });
+        this.props.saveOrderItems(this.props.order_id, this.props.order_items);
     };
     calculateTotalPrice = () => {
         return this.props.order_items.reduce((accumulator, currentValue) => { return accumulator + currentValue.quantity * currentValue.price }, 0);
@@ -161,7 +151,8 @@ const mapDispatchToProps = (dispatch) => {
         fetchOrderItems: (order_id) => dispatch(fetchOrderItems(order_id)),
         setItemQuantity: (payload) => dispatch(setItemQuantity(payload)),
         addOrderItems: (items) => dispatch(addOrderItems(items)),
-        removeOrderItem: (order_id, item_id) => dispatch(removeOrderItem(order_id, item_id))
+        removeOrderItem: (order_id, item_id) => dispatch(removeOrderItem(order_id, item_id)),
+        saveOrderItems: (order_id, items) => dispatch(saveOrderItems(order_id, items))
     }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Items);
