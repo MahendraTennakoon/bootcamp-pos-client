@@ -128,7 +128,7 @@ class Items extends Component {
                                             trigger={
                                                 <Button onClick={this.handleShowModal} floated='right' icon labelPosition='left' primary size='small'>
                                                     <Icon name='add' /> Add Items
-                                    </Button>
+                                                </Button>
                                             }>
                                             <Modal.Header>Add Items</Modal.Header>
                                             <Modal.Content>
@@ -148,7 +148,7 @@ class Items extends Component {
                                             onClick={this.handleDiscard}
                                         >
                                             <Icon name='cancel' /> Discard
-                            </Button>
+                                        </Button>
                                         <Button
                                             floated='right'
                                             icon
@@ -158,7 +158,7 @@ class Items extends Component {
                                             onClick={this.handleSave}
                                         >
                                             <Icon name='save' /> Save
-                            </Button>
+                                        </Button>
                                     </Table.HeaderCell>
                                 </Table.Row>
                             </Table.Footer>
