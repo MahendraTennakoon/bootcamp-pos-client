@@ -14,10 +14,12 @@ class AddItems extends Component {
         const itemIndex = this.newItems.findIndex(item => item.id === item_id);
 
         let parseQty = parseInt(quantity, 10);
-
+        
         if (isNaN(parseQty)) {
             parseQty = 0;
         }
+
+        parseQty = Math.abs(parseQty);
 
         if (itemIndex === -1) {
             this.newItems.push({ id: item_id, name: name, price: price, quantity: parseQty });
@@ -61,7 +63,7 @@ class AddItems extends Component {
                                 <Table.Cell>{item.name}</Table.Cell>
                                 <Table.Cell>{item.price}</Table.Cell>
                                 <Table.Cell>
-                                    <Input placeholder='0' onChange={(e) => {
+                                    <Input type="number" min={0} placeholder='0' onChange={(e) => {
                                         this.handleChangeQuantity(item.id, item.name, item.price, e.target.value);
                                     }} />
                                 </Table.Cell>

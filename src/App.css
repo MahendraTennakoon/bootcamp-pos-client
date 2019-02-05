@@ -4,3 +4,7 @@
     padding: 25px;
     margin-bottom: 50px;
 }
+
+.header_bar > h1 {
+    display: inline;
+}
