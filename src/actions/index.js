@@ -9,7 +9,8 @@ import {
     FETCH_ORDER_ITEMS_SUCCESS,
     FETCH_ORDER_ITEMS_ERROR,
     SET_ITEM_QUANTITY,
-    ADD_ORDER_ITEMS
+    ADD_ORDER_ITEMS,
+    REMOVE_ORDER_ITEM_ERROR
 } from '../constants/actionTypes';
 const axios = require('axios');
 
@@ -24,6 +25,20 @@ export const addOrderItems = (payload) => {
     return {
         type: ADD_ORDER_ITEMS,
         payload
+    }
+};
+
+export const removeOrderItem = (order_id, item_id) => {
+    return function (dispatch) {
+        axios
+            .delete(`http://localhost:8080/orders/${order_id}/${item_id}`)
+            .then(() => {
+                dispatch(fetchOrderItems(order_id));
+            })
+            .catch((error) => {
+                console.log(error);
+                dispatch({ type: REMOVE_ORDER_ITEM_ERROR })
+            });
     }
 };
 

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Item from './Item';
 import { Button, Icon, Table, Modal, Message } from 'semantic-ui-react';
 import AddItems from './AddItems';
-import { fetchItems, addOrder, fetchOrderItems, setItemQuantity, addOrderItems } from '../actions/index';
+import { fetchItems, addOrder, fetchOrderItems, setItemQuantity, addOrderItems, removeOrderItem } from '../actions/index';
 import { connect } from 'react-redux';
 const axios = require('axios');
 
@@ -30,22 +30,14 @@ class Items extends Component {
         }));
     };
     handleCloseModal = () => this.setState({ modalOpen: false });
-    // TODO: redux
     handleRemoveItem = (item_id) => {
-        axios
-            .delete(`http://localhost:8080/orders/${this.props.order_id}/${item_id}`)
-            .then((response) => {
-                this.props.fetchOrderItems(this.props.order_id);
-            })
-            .catch((error) => {
-                console.log(error);
-                this.setState(() => ({ error: 'Error contacting server!' }));
-            });
+        this.props.removeOrderItem(this.props.order_id, item_id);
     };
     handleDiscard = () => {
         // TODO: Add a loader
         this.props.fetchOrderItems(this.props.order_id);
     }
+    // TODO: redux
     handleSave = () => {
         axios
             .put(`http://localhost:8080/orders/${this.props.order_id}`, this.props.order_items)
@@ -168,7 +160,8 @@ const mapDispatchToProps = (dispatch) => {
         fetchItems: () => dispatch(fetchItems()),
         fetchOrderItems: (order_id) => dispatch(fetchOrderItems(order_id)),
         setItemQuantity: (payload) => dispatch(setItemQuantity(payload)),
-        addOrderItems: (items) => dispatch(addOrderItems(items))
+        addOrderItems: (items) => dispatch(addOrderItems(items)),
+        removeOrderItem: (order_id, item_id) => dispatch(removeOrderItem(order_id, item_id))
     }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Items);
