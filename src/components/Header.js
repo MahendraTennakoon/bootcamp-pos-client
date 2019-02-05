@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Image } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
 import { withRouter } from "react-router-dom";
 
 
@@ -12,7 +12,10 @@ const Header = (props) => {
     return (
         <div className="header_bar">
             <h1>{props.title}</h1>
-            <Button floated="right" color='yellow' onClick={handleLogOut}>Log Out</Button>
+            {
+                props.location.pathname !== '/login' &&
+                <Button floated="right" color='yellow' onClick={handleLogOut}>Log Out </Button>
+            }
         </div>
     );
 };
