@@ -2,27 +2,25 @@ import React, { Component } from 'react';
 import Item from './Item';
 import { Button, Icon, Table, Modal, Message } from 'semantic-ui-react';
 import AddItems from './AddItems';
-import update from 'immutability-helper';
-import { fetchItems, addOrder } from '../actions/index';
+import { fetchItems, addOrder, fetchOrderItems, setItemQuantity, addOrderItems, removeOrderItem, saveOrderItems } from '../actions/index';
 import { connect } from 'react-redux';
-const axios = require('axios');
 
 class Items extends Component {
     state = {
-        items: [],
         error: undefined,
         modalOpen: false
     };
     setItemQuantity = (item_id, quantity, edit_status) => {
-        const index = this.state.items.findIndex(item => item.id === item_id);
-        this.setState(() => ({
-            items: update(this.state.items, { [index]: { quantity: { $set: quantity }, isEditing: { $set: edit_status } } })
-        }));
+        const payload = {
+            item_id,
+            quantity,
+            edit_status
+        };
+
+        this.props.setItemQuantity(payload);
     };
     handleAdd = (items) => {
-        this.setState((prevState) => ({
-            items: [...prevState.items, ...items]
-        }));
+        this.props.addOrderItems(items);
         this.handleCloseModal();
     };
     handleShowModal = () => {
@@ -32,54 +30,24 @@ class Items extends Component {
     };
     handleCloseModal = () => this.setState({ modalOpen: false });
     handleRemoveItem = (item_id) => {
-        axios
-            .delete(`http://localhost:8080/orders/${this.props.order_id}/${item_id}`)
-            .then((response) => {
-                this.loadItems();
-            })
-            .catch((error) => {
-                console.log(error);
-                this.setState(() => ({ error: 'Error contacting server!' }));
-            });
+        this.props.removeOrderItem(this.props.order_id, item_id);
     };
     handleDiscard = () => {
         // TODO: Add a loader
-        // TODO: Use Redux
-        this.loadItems();
+        this.props.fetchOrderItems(this.props.order_id);
     }
     handleSave = () => {
-        axios
-            .put(`http://localhost:8080/orders/${this.props.order_id}`, this.state.items)
-            .then((response) => {
-                this.loadItems();
-            })
-            .catch((error) => {
-                console.log(error);
-                this.setState(() => ({ error: 'Error contacting server!' }));
-            });
+        this.props.saveOrderItems(this.props.order_id, this.props.order_items);
     };
     calculateTotalPrice = () => {
-        return this.state.items.reduce((accumulator, currentValue) => { return accumulator + currentValue.quantity * currentValue.price }, 0);
+        return this.props.order_items.reduce((accumulator, currentValue) => { return accumulator + currentValue.quantity * currentValue.price }, 0);
     };
     calculateTotalQuantity = () => {
-        return this.state.items.reduce((accumulator, currentValue) => { return accumulator + currentValue.quantity }, 0);
+        return this.props.order_items.reduce((accumulator, currentValue) => { return accumulator + currentValue.quantity }, 0);
     };
-    loadItems = () => {
-        axios.get(`http://localhost:8080/orders/${this.props.order_id}`)
-            .then((response) => {
-                if (response.data.length > 0) {
-                    this.setState(() => ({ items: response.data, error: undefined, isEditing: false }));
-                } else {
-                    this.setState(() => ({ error: 'There are no items in this order!' }));
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-                this.setState(() => ({ error: 'Error contacting server!' }));
-            });
-    };
+    
     componentDidMount() {
-        this.loadItems();
+        this.props.fetchOrderItems(this.props.order_id);
         this.props.fetchItems();
     };
     componentWillUnmount() {
@@ -105,7 +73,7 @@ class Items extends Component {
                             </Table.Header>
                             <Table.Body>
                                 {
-                                    this.state.items.map((item) => <Item setItemQuantity={this.setItemQuantity} handleRemoveItem={this.handleRemoveItem} item={item} key={item.id} />)
+                                    this.props.order_items.map((item) => <Item setItemQuantity={this.setItemQuantity} handleRemoveItem={this.handleRemoveItem} item={item} key={item.id} />)
                                 }
                             </Table.Body>
 
@@ -114,10 +82,10 @@ class Items extends Component {
                                     <Table.HeaderCell />
                                     <Table.HeaderCell />
                                     <Table.HeaderCell>
-                                        <strong>Total: {this.state.items.length > 0 && <span>{this.calculateTotalPrice()}</span>}</strong>
+                                        <strong>Total: {this.props.items.length > 0 && <span>{this.calculateTotalPrice()}</span>}</strong>
                                     </Table.HeaderCell>
                                     <Table.HeaderCell colSpan='3'>
-                                        <strong>Total: {this.state.items.length > 0 && <span>{this.calculateTotalQuantity()}</span>}</strong>
+                                        <strong>Total: {this.props.items.length > 0 && <span>{this.calculateTotalQuantity()}</span>}</strong>
                                     </Table.HeaderCell>
                                 </Table.Row>
                                 <Table.Row>
@@ -128,11 +96,11 @@ class Items extends Component {
                                             trigger={
                                                 <Button onClick={this.handleShowModal} floated='right' icon labelPosition='left' primary size='small'>
                                                     <Icon name='add' /> Add Items
-                                    </Button>
+                                                </Button>
                                             }>
                                             <Modal.Header>Add Items</Modal.Header>
                                             <Modal.Content>
-                                                <AddItems existingItems={this.state.items} handleAdd={this.handleAdd} />
+                                                <AddItems existingItems={this.props.order_items} handleAdd={this.handleAdd} />
                                             </Modal.Content>
                                         </Modal>
                                     </Table.HeaderCell>
@@ -148,7 +116,7 @@ class Items extends Component {
                                             onClick={this.handleDiscard}
                                         >
                                             <Icon name='cancel' /> Discard
-                            </Button>
+                                        </Button>
                                         <Button
                                             floated='right'
                                             icon
@@ -158,7 +126,7 @@ class Items extends Component {
                                             onClick={this.handleSave}
                                         >
                                             <Icon name='save' /> Save
-                            </Button>
+                                        </Button>
                                     </Table.HeaderCell>
                                 </Table.Row>
                             </Table.Footer>
@@ -172,13 +140,19 @@ class Items extends Component {
 const mapStateToProps = state => {
     return {
         items: state.items,
+        order_items: state.order_items,
         server_error: state.server_error
     }
 };
 const mapDispatchToProps = (dispatch) => {
     return {
         addOrder: order => dispatch(addOrder(order)),
-        fetchItems: () => dispatch(fetchItems())
+        fetchItems: () => dispatch(fetchItems()),
+        fetchOrderItems: (order_id) => dispatch(fetchOrderItems(order_id)),
+        setItemQuantity: (payload) => dispatch(setItemQuantity(payload)),
+        addOrderItems: (items) => dispatch(addOrderItems(items)),
+        removeOrderItem: (order_id, item_id) => dispatch(removeOrderItem(order_id, item_id)),
+        saveOrderItems: (order_id, items) => dispatch(saveOrderItems(order_id, items))
     }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Items);
